@@ -5,7 +5,7 @@ Experimental and exercising codes for deep learning.
 
 Run the script - ```python word2vec.py```
 
-Tutorial codes for training word2vec embeddings with the Skip-Grim model.
+Tutorial codes for training word2vec embeddings with the Skip-Gram model.
 
 The code is from the [Tensorflow Word2Vec Tutorial](https://www.tensorflow.org/tutorials/word2vec) ([Github repo](https://github.com/tensorflow/tensorflow/tree/r1.3/tensorflow/examples/tutorials/word2vec)), with minor adaptions.
 
