@@ -72,7 +72,7 @@ train_step = tf.train.AdagradOptimizer(0.3).minimize(total_loss)
 # Visualization function
 
 def plot(loss_list, predictions_series, batchX, batchY):
-    plt.subplot(2, int((batch_size + 1)/2), 1)
+    plt.subplot(2, (batch_size + 1)//2, 1)
     plt.cla()
     plt.plot(loss_list)
 
@@ -80,7 +80,7 @@ def plot(loss_list, predictions_series, batchX, batchY):
         one_hot_output_series = np.array(predictions_series)[:, batch_series_idx, :]
         single_output_series = np.array([(1 if out[0] < 0.5 else 0) for out in one_hot_output_series])
 
-        plt.subplot(2, int((batch_size + 1)/2), batch_series_idx + 2)
+        plt.subplot(2, (batch_size + 1)//2, batch_series_idx + 2)
         plt.cla()
         plt.axis([0, truncated_backprop_length, 0, 2])
         left_offset = range(truncated_backprop_length)
