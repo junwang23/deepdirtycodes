@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-num_epochs = 100
+num_epochs = 10
 total_series_length = 50000
 truncated_backprop_length = 15
 state_size = 4
@@ -33,27 +33,30 @@ Y = tf.placeholder(tf.int32, [batch_size, truncated_backprop_length])
 init_state = tf.placeholder(tf.float32, [batch_size, state_size])
 
 # weights and biases
-W = tf.Variable(np.random.rand(state_size + 1, state_size), dtype=tf.float32)
-b = tf.Variable(np.zeros((1, state_size)), dtype=tf.float32)
+# W = tf.Variable(np.random.rand(state_size + 1, state_size), dtype=tf.float32)
+# b = tf.Variable(np.zeros((1, state_size)), dtype=tf.float32)
 
 W2 = tf.Variable(np.random.rand(state_size, num_classes), dtype=tf.float32)
 b2 = tf.Variable(np.zeros((1, num_classes)), dtype=tf.float32)
 
 
 # Unpack columns
-inputs_series = tf.unstack(X, axis=1)
+# inputs_series = tf.unstack(X, axis=1)
+inputs_series = tf.split(X, truncated_backprop_length, 1)
 labels_series = tf.unstack(Y, axis=1)
 
 # Forward pass
-current_state = init_state
-states_series = []
-for current_input in inputs_series:
-    current_input = tf.reshape(current_input, [batch_size, 1])
-    input_and_state_concatenated = tf.concat([current_input, current_state], 1)
+# current_state = init_state
+# states_series = []
+# for current_input in inputs_series:
+#     current_input = tf.reshape(current_input, [batch_size, 1])
+#     input_and_state_concatenated = tf.concat([current_input, current_state], 1)
 
-    next_state = tf.tanh(tf.matmul(input_and_state_concatenated, W) + b)
-    states_series.append(next_state)
-    current_state = next_state
+#     next_state = tf.tanh(tf.matmul(input_and_state_concatenated, W) + b)
+#     states_series.append(next_state)
+#     current_state = next_state
+cell = tf.contrib.rnn.BasicRNNCell(state_size)
+states_series, current_state = tf.contrib.rnn.static_rnn(cell, inputs_series, init_state)
 
 # softmax corss entropy loss
 logits_series = [tf.matmul(state, W2) + b2 for state in states_series]
@@ -69,21 +72,21 @@ train_step = tf.train.AdagradOptimizer(0.3).minimize(total_loss)
 # Visualization function
 
 def plot(loss_list, predictions_series, batchX, batchY):
-    plt.subplot(2, 3, 1)
+    plt.subplot(2, int((batch_size + 1)/2), 1)
     plt.cla()
     plt.plot(loss_list)
 
-    for batch_series_idx in range(5):
+    for batch_series_idx in range(batch_size):
         one_hot_output_series = np.array(predictions_series)[:, batch_series_idx, :]
         single_output_series = np.array([(1 if out[0] < 0.5 else 0) for out in one_hot_output_series])
 
-        plt.subplot(2, 3, batch_series_idx + 2)
+        plt.subplot(2, int((batch_size + 1)/2), batch_series_idx + 2)
         plt.cla()
         plt.axis([0, truncated_backprop_length, 0, 2])
         left_offset = range(truncated_backprop_length)
-        plt.bar(left_offset, batchX[batch_series_idx, :], width=1, color="blue")
-        plt.bar(left_offset, batchY[batch_series_idx, :] * 0.5, width=1, color="red")
-        plt.bar(left_offset, single_output_series * 0.3, width=1, color="green")
+        plt.bar(left_offset, batchX[batch_series_idx, :], width=1, color="blue", edgecolor='black')
+        plt.bar(left_offset, batchY[batch_series_idx, :] * 0.5, width=1, color="red", edgecolor='black')
+        plt.bar(left_offset, single_output_series * 0.3, width=1, color="green", edgecolor='black')
 
     plt.draw()
     plt.pause(0.0001)
