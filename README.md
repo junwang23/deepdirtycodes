@@ -2,6 +2,19 @@
 
 Experimental and exercising codes for deep learning with TensorFlow.
 
+## MNIST on CNN
+
+Tutorial codes for learning the basics of nueral networks and training a simple CNN for image classification.
+
+The code is from the tutorial blogs of [Python TensorFlow Tutorial – Build a Neural Network](http://adventuresinmachinelearning.com/python-tensorflow-tutorial/) and of [Convolutional Neural Networks Tutorial in TensorFlow](http://adventuresinmachinelearning.com/convolutional-neural-networks-tutorial-tensorflow/).
+
+The official tutorial for building CNN with TensorFlow is available [here](https://www.tensorflow.org/tutorials/layers).
+
+Related scripts
+
+-   `mnist_simple.py` - A simple feed-forward neural network for MNIST image classification (%96-97 accuracy).
+-   `mnist_cnn.py` - A CNN model with two convolution layers (about 99% accuracy).
+
 ## Word2Vec
 
 Tutorial codes for training word2vec embeddings with the Skip-Gram model.

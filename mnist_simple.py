@@ -14,16 +14,19 @@ x = tf.placeholder(tf.float32, [None, 784])
 y = tf.placeholder(tf.float32, [None, 10])
 
 # weights connecting the input to the hidden layer
-W1 = tf.Variable(tf.random_normal([784, 300], stddev=0.03), name='W1')
-b1 = tf.Variable(tf.random_normal([300]), name='b1')
+W1 = tf.Variable(tf.random_normal([784, 400], stddev=0.03), name='W1')
+b1 = tf.Variable(tf.random_normal([400]), name='b1')
+W2 = tf.Variable(tf.random_normal([400, 100], stddev=0.03), name='W2')
+b2 = tf.Variable(tf.random_normal([100]), name='b2')
 # weights connecting the hidden layer to the ouput layer
-W2 = tf.Variable(tf.random_normal([300, 10], stddev=0.03), name='W1')
-b2 = tf.Variable(tf.random_normal([10]), name='b2')
+W = tf.Variable(tf.random_normal([100, 10], stddev=0.03), name='W')
+b = tf.Variable(tf.random_normal([10]), name='b')
 
 # the hidden layer with a relu activation
-hidden_out = tf.nn.relu(tf.add(tf.matmul(x, W1), b1))
+hidden_out1 = tf.nn.relu(tf.add(tf.matmul(x, W1), b1))
+hidden_out2 = tf.nn.relu(tf.add(tf.matmul(hidden_out1, W2), b2))
 # output layer with a softmax activation
-y_ = tf.nn.softmax(tf.add(tf.matmul(hidden_out, W2), b2))
+y_ = tf.nn.softmax(tf.add(tf.matmul(hidden_out2, W), b))
 
 # cross entropy loss function
 y_clipped = tf.clip_by_value(y_, 1e-10, 0.9999999)
