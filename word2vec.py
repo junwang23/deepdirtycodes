@@ -32,6 +32,7 @@ def maybe_download(filename, expected_bytes):
         raise Exception('Failed to verify ' + filename)
     return filename
 
+
 filename = maybe_download('text8.zip', 31344016)
 
 
@@ -41,6 +42,7 @@ def read_data(filename):
     with zipfile.ZipFile(filename) as f:
         data = tf.compat.as_str(f.read(f.namelist()[0])).split()
     return data
+
 
 vocabulary = read_data('data/' + filename)
 print('Data size', len(vocabulary))
@@ -68,6 +70,7 @@ def build_dataset(words, n_words):
     count[0][1] = unk_count
     reversed_dictionary = dict(zip(dictionary.values(), dictionary.keys()))
     return data, count, dictionary, reversed_dictionary
+
 
 # count is the # occurrence of the most frequent words, ordered by frequency
 # dictionary  = {word0: identifier, ... } words are ordered as in count
@@ -113,6 +116,7 @@ def generate_batch(data, batch_size, num_skips, skip_window):
     # Backtrack a little bit to avoid skipping words in the end of a batch
     data_index = (data_index + len(data) - span) % len(data)
     return batch, labels
+
 
 batch, labels = generate_batch(data, batch_size=8, num_skips=2, skip_window=1)
 for i in range(8):
@@ -227,7 +231,8 @@ def run(graph, num_steps):
                 print('Average loss at step ', step, ': ', average_loss)
                 average_loss = 0
 
-            # Note that this is expensive (~20% slowdown if computed every 500 steps)
+            # Note that this is expensive
+            # (~20% slowdown if computed every 500 steps)
             if step % 10000 == 0:
                 sim = similarity.eval()
                 for i in range(valid_size):
@@ -264,6 +269,7 @@ def plot_with_labels(low_dim_embs, labels, filename='results/skipgram.png'):
                      va='bottom')
 
     plt.savefig(filename)
+
 
 num_steps = 50001
 nce_start_time = dt.datetime.now()
