@@ -35,3 +35,12 @@ Related scripts
 
 -   `rnn_basic.py` - A simple recurrent neural network learning a time-series of numbers echoing with fixed time delay.
 -   `rnn_lstm.py` - The same echo time-serie learned with single/multi-layer lstm network, based on tensorflow api.
+
+
+## Dilated CNN
+
+The network strucure is based on this [arXiv paper](https://arxiv.org/abs/1703.04691), where a 1D diated CNN is used to predict financial time series.
+
+Related scripts
+- The network is implemented in the ```tcn``` module. 
+- ```tcn_sp500.py``` gives a demo of training the network (4 layers with kernel size of 4 and filter size of 1) to do a 1-step-ahead prediction of a single time sequence. The demo also produces log files for tensorboard visualization.
